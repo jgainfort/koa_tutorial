@@ -12,22 +12,33 @@ function *reqLogger(next) {
 }
 app.use(reqLogger);
 
-// GitHub router
+// GitHub authentication router
 publicRouter.get("/auth/github", function *() {
-    console.log("Middleware style example");
     this.body = "Authenticate with GitHub OAUTH API (coming soon)";
 });
 app.use(publicRouter.middleware());
 
-// Facebook router
+// Facebook authentication router
 publicRouter.get("/auth/facebook", function *() {
     this.body = "Authenticate with Facebook OAUTH API (coming soon)";
 });
 app.use(publicRouter.middleware());
 
+// Google authentication router
+publicRouter.get("/auth/google", function *() {
+    this.body = "Authenticate with Google OAUTH API (coming soon)";
+});
+app.use(publicRouter.middleware());
+
+// Twitter authentication router
+publicRouter.get("/auth/twitter", function *() {
+    this.body = "Authenticate with Twitter OAUTH API (coming soon)";
+});
+app.use(publicRouter.middleware());
+
+// Default request
 app.use(function *() {
     this.body = "hello world!";
 });
-
 app.listen(3000);
 
