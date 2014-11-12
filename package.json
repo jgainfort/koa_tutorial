@@ -1,0 +1,26 @@
+{
+  "name": "koa_tutorial",
+  "version": "1.0.0",
+  "description": "KOA Tutorial",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jgainfort/koa_tutorial.git"
+  },
+  "keywords": [
+    "koa",
+    "tutorial"
+  ],
+  "author": "John Gainfort Jr",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/jgainfort/koa_tutorial/issues"
+  },
+  "homepage": "https://github.com/jgainfort/koa_tutorial",
+  "dependencies": {
+    "koa": "^0.13.0"
+  }
+}
