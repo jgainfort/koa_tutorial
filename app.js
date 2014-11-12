@@ -24,6 +24,10 @@ publicRouter.get("/auth/github/callback", passport.authenticate("github", {succe
 
 publicRouter.get("/auth/facebook", passport.authenticate("facebook"));
 publicRouter.get("/auth/facebook/callback", passport.authenticate("facebook", {successRedirect: "/", failureRedirect: "/login"}));
+
+publicRouter.get("/auth/google", passport.authenticate("google"));
+publicRouter.get("/auth/google/callback", passport.authenticate("google", {successRedirect: "/", failureRedirect: "/login"}));
+
 app.use(publicRouter.middleware());
 
 // Secure routes
@@ -41,22 +45,25 @@ function *authedFacebook(next) {
     else this.redirect("/auth/facebook");
 }
 
+//Middleware: authed for Google
+function *authedGoogle(next) {
+    if (this.req.isAuthenticated()) yield next;
+    else this.redirect("/auth/google");
+}
+
 securedRouter.get("/github", authedGithub, function *() {
     this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.req.user, null, "\t");
 });
 
 securedRouter.get("/facebook", authedFacebook, function *() {
-    this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.requ.user, null, "\t");
+    this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.req.user, null, "\t");
+});
+
+securedRouter.get("/google", authedGoogle, function *() {
+    this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.req.user, null, "\t");
 });
 
 app.use(securedRouter.middleware());
-
-// Google authentication router
-publicRouter.get("/auth/google", function *() {
-    this.body = "Authenticate with Google OAUTH API (coming soon)";
-});
-
-app.use(publicRouter.middleware());
 
 // Twitter authentication router
 publicRouter.get("/auth/twitter", function *() {

@@ -35,6 +35,16 @@ passport.use(new FacebookStrategy({
 );
 
 // Google Strategy
+passport.use(new GoogleStrategy({
+        returnURL: "http://localhost:3000/auth/google/callback",
+        realm: "http://localhost:3000"
+    },
+    function(identifier, profile, done) {
+        process.nextTick(function() {
+            return done(null, profile);
+        });
+    })
+);
 
 // Twitter Strategy
 
