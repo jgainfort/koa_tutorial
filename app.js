@@ -21,33 +21,41 @@ var publicRouter = new Router();
 // Configure /auth/github and /auth/github/callback
 publicRouter.get("/auth/github", passport.authenticate("github", {scope: ["user", "repo"]}));
 publicRouter.get("/auth/github/callback", passport.authenticate("github", {successRedirect: "/", failureRedirect: "/"}));
+
+publicRouter.get("/auth/facebook", passport.authenticate("facebook"));
+publicRouter.get("/auth/facebook/callback", passport.authenticate("facebook", {successRedirect: "/", failureRedirect: "/login"}));
 app.use(publicRouter.middleware());
 
 // Secure routes
 var securedRouter = new Router();
 
-// Middleware: authed
-function *authed(next) {
+// Middleware: authed for GitHub
+function *authedGithub(next) {
     if (this.req.isAuthenticated()) yield next;
     else this.redirect("/auth/github");
 }
 
-securedRouter.get("/app", authed, function *() {
+// Middleware: authed for Facebook
+function *authedFacebook(next) {
+    if (this.req.isAuthenticated()) yield next;
+    else this.redirect("/auth/facebook");
+}
+
+securedRouter.get("/github", authedGithub, function *() {
     this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.req.user, null, "\t");
 });
 
-app.use(securedRouter.middleware());
-
-// Facebook authentication router
-publicRouter.get("/auth/facebook", function *() {
-    this.body = "Authenticate with Facebook OAUTH API (coming soon)";
+securedRouter.get("/facebook", authedFacebook, function *() {
+    this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.requ.user, null, "\t");
 });
-app.use(publicRouter.middleware());
+
+app.use(securedRouter.middleware());
 
 // Google authentication router
 publicRouter.get("/auth/google", function *() {
     this.body = "Authenticate with Google OAUTH API (coming soon)";
 });
+
 app.use(publicRouter.middleware());
 
 // Twitter authentication router
