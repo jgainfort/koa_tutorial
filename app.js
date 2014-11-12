@@ -1,9 +1,10 @@
 "use strict"
 
-var koa = require("koa");
 var Router = require("koa-router");
+var passport = require("./auth");
+
+var koa = require("koa");
 var app = koa();
-var publicRouter = new Router();
 
 // Middleware: request logger
 function *reqLogger(next) {
@@ -12,11 +13,30 @@ function *reqLogger(next) {
 }
 app.use(reqLogger);
 
-// GitHub authentication router
-publicRouter.get("/auth/github", function *() {
-    this.body = "Authenticate with GitHub OAUTH API (coming soon)";
-});
+// Initialize passport
+app.use(passport.initialize());
+
+var publicRouter = new Router();
+
+// Configure /auth/github and /auth/github/callback
+publicRouter.get("/auth/github", passport.authenticate("github", {scope: ["user", "repo"]}));
+publicRouter.get("/auth/github/callback", passport.authenticate("github", {successRedirect: "/", failureRedirect: "/"}));
 app.use(publicRouter.middleware());
+
+// Secure routes
+var securedRouter = new Router();
+
+// Middleware: authed
+function *authed(next) {
+    if (this.req.isAuthenticated()) yield next;
+    else this.redirect("/auth/github");
+}
+
+securedRouter.get("/app", authed, function *() {
+    this.body = "Secured Zone: koa-tutorial\n" + JSON.stringify(this.req.user, null, "\t");
+});
+
+app.use(securedRouter.middleware());
 
 // Facebook authentication router
 publicRouter.get("/auth/facebook", function *() {
