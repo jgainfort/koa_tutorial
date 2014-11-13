@@ -47,6 +47,17 @@ passport.use(new GoogleStrategy({
 );
 
 // Twitter Strategy
+passport.use(new TwitterStrategy({
+        consumerKey: "owOlMXUfyefdRXoTFo5oP0j0n",
+        consumerSecret: "c9H9rJawjMljDUXgKPkM7pwYJtN3Ds7UJrhM7mIpUegu2KDNud",
+        callbackURL: "http://localhost:3000/auth/twitter/callback"
+    },
+    function(token, tokenSecret, profile, done) {
+        process.nextTick(function() {
+            return done(null, profile);
+        });
+    })
+);
 
 passport.serializeUser(function(user, done) {
     done(null, user);
