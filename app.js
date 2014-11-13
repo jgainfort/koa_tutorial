@@ -118,7 +118,7 @@ app.use(function *(next) {
 app.use(function *(next) {
     if (this.path !== "/login") return yield next;
 
-    this.body = yield render("login");
+    this.body = yield render("index");
 });
 
 app.use(function *(next) {
