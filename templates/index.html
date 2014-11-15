@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
 <head>
     <title>koa tutorial</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <script type="text/javascript" src="angular.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="controllers.js"></script>
 </head>
-<body>
-    <form action="/twitter">
-        <input type="image" src="images/sign-in-with-twitter-gray.png" alt="submit">
-    </form>
+<body ng-controller="MyController">
+    <div>
+        <h3>Website: {{login.website}}</h3>
+        <span>1 + 1 =  {{1+1}}</span>
+    </div>
 </body>
 </html>

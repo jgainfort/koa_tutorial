@@ -4,13 +4,20 @@ var Router = require("koa-router");
 var session = require("koa-generic-session");
 var redisStore = require("koa-redis");
 var views = require("co-views");
+var staticCache = require("koa-static-cache");
 var passport = require("./auth");
 
 var koa = require("koa");
 var app = koa();
 
+var files = {};
+
+app.use(staticCache(__dirname + "/static/css", {}, files));
+staticCache(__dirname + "/static/images", {}, files);
+staticCache(__dirname + "/static/js", {}, files);
+
 app.keys = ["keys", "keyskeys"];
-app.use(session());
+app.use(session("."));
 
 var render = views("templates", {
     map: {html: "swig"}
